@@ -17,10 +17,11 @@ green = None
 yellow = None
 orange = None
 red  = None
+black = None
+ledHash = None
 
-#print(data['forecast']['simpleforecast']['forecastday'].keys)
+# vul de led hashmap, schrijf de kleuren naar de pixel
 def fillColorDays():
-	ledstrip.colorwipe(ledstrip.Color(100,100,100),0)
 	i = 0
 	j = 1
 	for day in data['forecast']['simpleforecast']['forecastday']:
@@ -30,23 +31,21 @@ def fillColorDays():
 			colorDay( day['conditions'], day['high']['celsius'], i+3, i+2, i+1, i)	
 		i = i + 4
 		j = j * -1
-		#print (day['date']['weekday'] + ":")
-		#print ("Conditions: ", day['conditions'])
-		#print ("High: ", day['high']['celsius'] + "C", "Low: ", day['low']['celsius'] + "C", '\n')
-		#i = i + 1
-	#inbouwen voor ledjes
+	for key in ledHash:
+		ledstrip.setpixelcolor(i,ledHash[key])
 	ledstrip.writestrip()
 
+#zet in de hashmap de led die gekleurd moet worden + de kleur
 def colorDay(condition, temp,l1,l2,l3,l4):
 	print("Condition " + condition)
 	print("Temperature " + temp + " color " + temperature(int(temp)) )
 	turnOnLights = conditionLight(condition,l1,l2,l3,l4)
-	for i in range(len(turnOnLights)):
+	for i in turnOnLights:
+		ledHash[i] = temperature(int(temp))
 		print(turnOnLights[i])
-		ledstrip.setpixelcolor(i,temperature(int(temp)))
 	print(turnOnLights)
 	
-#moet een string returnen, kunnen meerdere mogelijk zijn  (party cloud = zon en wolken)
+#returned een lijst van de ledjes die een kleur moeten krijgen
 def conditionLight(condition,l1,l2,l3,l4):
 	if ('Rain' in condition):
 		if ('Chance' in condition):
@@ -65,16 +64,7 @@ def conditionLight(condition,l1,l2,l3,l4):
 	elif('Fog' in condition or 'Mist' in condition):
 		return [0]
 	else: #Fog,Mist,Haze, (ligth)Snow, Ice Crystals
-		return [999]
-		
-	#	return 1
-		#contains chance
-	#elif(condition contains cloud )
-		#contains party 
-	#elif condition contains sun
-	#elif condition contains snow 
-	#elif 
-	
+		return [0]
 #return color	
 def temperature(temp):
 	if(temp < 0):
@@ -95,7 +85,6 @@ def temperature(temp):
 		return red
 		
 if __name__ == "__main__":
-		
 	ledstrip = Ledstrip()
 	ledstrip.colorwipe(ledstrip.Color(0,0,0),0)
 	#<0		wit 
@@ -114,4 +103,5 @@ if __name__ == "__main__":
 	orange = ledstrip.Color(255,100,0)
 	#30+    rood   255 0 0
 	red   = ledstrip.Color(255,0,0)
+	black = ledstrip.Color(0,0,0)
 	fillColorDays()
