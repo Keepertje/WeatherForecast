@@ -1,5 +1,5 @@
 import requests
-#from Ledstrip import Ledstrip
+from Ledstrip import Ledstrip
 
 
 try:
@@ -8,7 +8,7 @@ except requests.exceptions.ConnectionError:
     print("No interwebs O_o")
 	
 data = forecast.json()
-#ledstrip = None
+ledstrip = None
 white = None
 lBlue = None
 blue = None
@@ -20,7 +20,7 @@ red  = None
 
 #print(data['forecast']['simpleforecast']['forecastday'].keys)
 def fillColorDays():
-	#allColor(12, ledstrip.color(0,0,0,0),0)
+	ledstrip.colorwipe(ledstrip.Color(100,100,100),0)
 	i = 0
 	j = 1
 	for day in data['forecast']['simpleforecast']['forecastday']:
@@ -35,15 +35,15 @@ def fillColorDays():
 		#print ("High: ", day['high']['celsius'] + "C", "Low: ", day['low']['celsius'] + "C", '\n')
 		#i = i + 1
 	#inbouwen voor ledjes
-	#ledstrip.writestrip()
+	ledstrip.writestrip()
 
 def colorDay(condition, temp,l1,l2,l3,l4):
 	print("Condition " + condition)
 	print("Temperature " + temp + " color " + temperature(int(temp)) )
 	turnOnLights = conditionLight(condition,l1,l2,l3,l4)
-	#for i in range(len(turnOnLights)):
-		#print(turnOnLights[i])
-		#setpixels
+	for i in range(len(turnOnLights)):
+		print(turnOnLights[i])
+		ledstrip.setpixelcolor(i,temperature(int(temp)))
 	print(turnOnLights)
 	
 #moet een string returnen, kunnen meerdere mogelijk zijn  (party cloud = zon en wolken)
@@ -63,7 +63,7 @@ def conditionLight(condition,l1,l2,l3,l4):
 	elif('Snow' in condition):
 		return [l4]
 	elif('Fog' in condition or 'Mist' in condition):
-		return [88]
+		return [0]
 	else: #Fog,Mist,Haze, (ligth)Snow, Ice Crystals
 		return [999]
 		
@@ -78,38 +78,40 @@ def conditionLight(condition,l1,l2,l3,l4):
 #return color	
 def temperature(temp):
 	if(temp < 0):
-		return "white"
+		return white
 	elif(temp < 5 and temp >= 0):
-		return "lBlue"
+		return lBlue
 	elif(temp < 10 and temp >= 5):
-		return "blue"
+		return blue
 	elif(temp < 15 and temp >= 10):
-		return "lGreen"
+		return lGreen
 	elif(temp < 20 and temp >= 15):
-		return "green"
+		return green
 	elif(temp < 25 and temp >= 20):		
-		return "yellow"
+		return yellow
 	elif(temp < 30 and temp >= 25):
-		return "orange"
+		return orange
 	else:
-		return "red"
+		return red
 		
 if __name__ == "__main__":
-	#ledstrip = Ledstrip()
+		
+	ledstrip = Ledstrip()
+	ledstrip.colorwipe(ledstrip.Color(0,0,0),0)
 	#<0		wit 
-	#white = ledstrip.Color(255,255,255,0.5)
+	white = ledstrip.Color(255,255,255)
 	#0-5	lichtblauw 
-	#lBlue = ledstrip.Color(100,100,255,0.5)
+	lBlue = ledstrip.Color(100,100,255)
 	#6-10   blauw 
-	#blue  = ledstrip.Color(0,0,255) 
+	blue  = ledstrip.Color(0,0,255) 
 	#11-15  lichtgroen 
-	#lGreen = ledstrip.Color(100,255,100,0.5)
+	lGreen = ledstrip.Color(100,255,100)
 	#16-20  groen 
-	#green = ledstrip.Color(0,255,0,0.5)
+	green = ledstrip.Color(0,255,0)
 	#21-25  geel  
-	#yellow = ledstrip.Color(255,255,0,0.5)
+	yellow = ledstrip.Color(255,255,0)
 	#26-30  oranje  
-	#orange = ledstrip.Color(255,100,0,0.5)
+	orange = ledstrip.Color(255,100,0)
 	#30+    rood   255 0 0
-	#red   = ledstrip.Color(255,0,0,0.5)
+	red   = ledstrip.Color(255,0,0)
 	fillColorDays()

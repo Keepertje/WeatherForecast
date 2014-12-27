@@ -28,7 +28,7 @@ class Ledstrip():
 			self.writestrip()
 			time.sleep(delay)
 	
-	def allColor2(colorList):	
+	def allColor2(self,colorList):	
 		for i in range(4):
 			curC = self.Color([i][0],[i][1],[i][2])
 			for n in range(6):
@@ -40,23 +40,23 @@ class Ledstrip():
 	def allColor(self,pixels,c,wait):
 	    for i in range(len(pixels)):
 			self.setpixelcolor(i,c)
-        self.writestrip()
-        time.sleep(wait)
-
+            self.writestrip()
+            time.sleep(wait)
+	
 		
 	def rainbow(self):
-		r = 255
-        g = 0
-        b = 0
-        for i in range(255):
+	 r = 255
+         g = 0
+         b = 0
+         for i in range(255):
                 g = i
                 r = 255-i
                 self.allColor(self.ledpixels, self.Color(r,g,b),0.02)
-       	for i in range(255):
+       	 for i in range(255):
                 b = i
                 g = 255-i
                 self.allColor(self.ledpixels,self.Color(r,g,b),0.02)
-        for i in range(255):
+         for i in range(255):
                 r = i
                 b = 255-i
                 self.allColor(self.ledpixels,self.Color(r,g,b),0.02)
