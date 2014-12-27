@@ -22,27 +22,28 @@ ledHash = None
 
 # vul de led hashmap, schrijf de kleuren naar de pixel
 def fillColorDays():
-	i = 0
+	i = 1
 	j = 1
 	for day in data['forecast']['simpleforecast']['forecastday']:
 		if( j < 0 ):
-			colorDay( day['conditions'], day['high']['celsius'], i, i+1, i+2, i+3)
+			colorDay( day['conditions'], day['high']['celsius'], i+3,i+2,i+1,1)
 		else:
-			colorDay( day['conditions'], day['high']['celsius'], i+3, i+2, i+1, i)	
+			colorDay( day['conditions'], day['high']['celsius'], i, i+1, i+2, i+3)	
 		i = i + 4
 		j = j * -1
 	for key in ledHash:
-		ledstrip.setpixelcolor(i,ledHash[key])
+		print(key)
+		ledstrip.setpixelcolor(key,ledHash[key])
 	ledstrip.writestrip()
 
 #zet in de hashmap de led die gekleurd moet worden + de kleur
 def colorDay(condition, temp,l1,l2,l3,l4):
 	print("Condition " + condition)
-	print("Temperature " + temp + " color " + temperature(int(temp)) )
+	print("Temperature " + temp)# + " color " + temperature(int(temp)) )
 	turnOnLights = conditionLight(condition,l1,l2,l3,l4)
 	for i in turnOnLights:
 		ledHash[i] = temperature(int(temp))
-		print(turnOnLights[i])
+#		print("ledjes: " + i)
 	print(turnOnLights)
 	
 #returned een lijst van de ledjes die een kleur moeten krijgen
@@ -104,4 +105,5 @@ if __name__ == "__main__":
 	#30+    rood   255 0 0
 	red   = ledstrip.Color(255,0,0)
 	black = ledstrip.Color(0,0,0)
+	ledHash={}
 	fillColorDays()
