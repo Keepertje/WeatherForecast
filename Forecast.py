@@ -3,7 +3,7 @@ from Ledstrip import Ledstrip
 
 
 try:
-	forecast = requests.get("http://api.wunderground.com/api/b5ed728d92fe3c96/forecast/q/NL/Utrecht.json")
+	forecast = requests.get("http://api.wunderground.com/api/ APIKEY /forecast/q/NL/Utrecht.json")
 except requests.exceptions.ConnectionError:
     print("No interwebs O_o")
 	
